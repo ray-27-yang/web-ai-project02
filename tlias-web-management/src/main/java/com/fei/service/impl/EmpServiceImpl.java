@@ -2,11 +2,15 @@ package com.fei.service.impl;
 
 import com.fei.mapper.EmpMapper;
 import com.fei.pojo.Emp;
+import com.fei.pojo.EmpQueryParam;
 import com.fei.pojo.PageResult;
 import com.fei.service.EmpService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -14,16 +18,20 @@ import java.util.List;
  */
 @Service
 public class EmpServiceImpl implements EmpService {
-    @Autowired
-    private EmpMapper empMapper;
+    private final EmpMapper empMapper;
+
+    public EmpServiceImpl(EmpMapper empMapper) {
+        this.empMapper = empMapper;
+    }
+
     @Override
-    public PageResult<Emp> page(Integer page, Integer pageSize) {
-        //1.调用Mapper接口查询总记录数
-        long total = empMapper.count();
-        //2.调用Mapper接口查询结果列表
-        Integer start = (page - 1)* pageSize;
-        List<Emp> rows = empMapper.list(start,pageSize);
-        //3.封装结果
-        return new PageResult<Emp>(total,rows);
+    public PageResult<Emp> page(EmpQueryParam empQueryParam) {
+        //1.设置分页参数
+        PageHelper.startPage(empQueryParam.getPage(),empQueryParam.getPageSize());
+        //2.执行查询
+        List<Emp> list = empMapper.list(empQueryParam);
+        //3.解析查询结果，并封装
+        Page<Emp> p = (Page<Emp>)list;
+        return new PageResult<Emp>(p.getTotal(),p.getResult());
     }
 }

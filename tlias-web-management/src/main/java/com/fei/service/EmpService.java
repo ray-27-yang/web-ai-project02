@@ -1,13 +1,15 @@
 package com.fei.service;
 
 import com.fei.pojo.Emp;
+import com.fei.pojo.EmpQueryParam;
 import com.fei.pojo.PageResult;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 public interface EmpService {
     /**
      * 分页查询
-     * @param page 页码
-     * @param pageSize 每页查询的记录数
      */
-    PageResult<Emp> page(Integer page, Integer pageSize);
+    PageResult<Emp> page(EmpQueryParam empQueryParam);
 }
