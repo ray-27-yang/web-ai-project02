@@ -32,6 +32,10 @@ public interface EmpMapper {
             "values (#{username},#{name},#{gender},#{phone},#{job},#{salary},#{image},#{entryDate},#{deptId},#{createTime},#{updateTime});")
     void insert(Emp emp);
 
+    /**
+     * 根据id批量删除员工基本信息
+     */
+    void deleteByIds(List<Integer> ids);
 
 
     // ------------------------ 原始分页查询-----------------------------------

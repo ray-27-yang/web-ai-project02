@@ -40,6 +40,17 @@ public class EmpServiceImpl implements EmpService {
         Page<Emp> p = (Page<Emp>)list;
         return new PageResult<Emp>(p.getTotal(),p.getResult());
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void delete(List<Integer> ids) {
+        //删除员工基本信息
+        empMapper.deleteByIds(ids);
+        //删除员工工作经历信息
+        empExprMapper.deleteByEmpIds(ids);
+
+    }
+
     @Transactional(rollbackFor = {Exception.class})//事务管理
     @Override
     public void save(Emp emp) {
